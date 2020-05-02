@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yummi/models/pizzaModel.dart';
+import 'package:yummi/screens/orderDetail.dart';
 import 'package:yummi/widgets/starRate.dart';
 
 class PizzaDetail extends StatefulWidget {
@@ -13,11 +14,11 @@ class PizzaDetail extends StatefulWidget {
 
 class _PizzaDetailState extends State<PizzaDetail> {
   int _quantity = 1;
-  int _totalPrice = 1;
+  double _totalPrice = 1;
+  List<PizzaModel> _items = [];
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -29,6 +30,60 @@ class _PizzaDetailState extends State<PizzaDetail> {
           iconSize: 30,
         ),
         centerTitle: true,
+        actions: [
+          Container(
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    CupertinoIcons.shopping_cart,
+                    color: Colors.orange,
+                    size: 36,
+                  ),
+                  onPressed: () {
+                    _items.isNotEmpty
+                        ? Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => OrderDetail(_items),
+                          ))
+                        : showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: Text('Your cart is empty'),
+                                actions: [
+                                  FlatButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Text(
+                                        'OK',
+                                        style:
+                                            TextStyle(color: Colors.blue[700]),
+                                      ))
+                                ],
+                              );
+                            },
+                          );
+                  },
+                ),
+                _items.length > 0
+                    ? Padding(
+                        padding: EdgeInsets.only(left: 2),
+                        child: CircleAvatar(
+                          radius: 8,
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                          child: Text(
+                            _items.length.toString(),
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
+          )
+        ],
       ),
       backgroundColor: Colors.white,
       body: Container(
@@ -113,8 +168,8 @@ class _PizzaDetailState extends State<PizzaDetail> {
                       ),
                       onPressed: () {
                         setState(() {
-                          _quantity --;
-                          _totalPrice = _quantity * (widget.model.price.toInt());
+                          _quantity--;
+                          _totalPrice = _quantity * (widget.model.price);
                         });
                       },
                     ),
@@ -135,8 +190,9 @@ class _PizzaDetailState extends State<PizzaDetail> {
                       ),
                       onPressed: () {
                         setState(() {
-                          _quantity ++;
-                          _totalPrice = _quantity * (widget.model.price.toInt());
+                          _quantity++;
+                          _totalPrice = _quantity * (widget.model.price);
+                          widget.model.quantity = _quantity;
                         });
                       },
                     ),
@@ -144,28 +200,37 @@ class _PizzaDetailState extends State<PizzaDetail> {
                 ),
                 Text(
                   _quantity == 1
-                  ? '${widget.model.price.toInt().toString()} KES'
-                  : '$_totalPrice KES',
+                      ? '${widget.model.price.toInt().toString()} KES'
+                      : '$_totalPrice KES',
                   style: TextStyle(color: Colors.white, fontSize: 30),
                 )
               ],
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: RaisedButton(onPressed: () {
-                
-              },
-              padding: EdgeInsets.all(12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)
-              ),
-              color: Colors.orange,
-              child: Text(
-                'Add to Cart',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25
-                ),),
+              child: RaisedButton(
+                onPressed: () {
+                  setState(() {
+                    if (_items.contains(widget.model)) {
+                      _items.remove(widget.model);
+                    } else {
+                      _items.add(widget.model);
+                    }
+                  });
+                },
+                padding: EdgeInsets.all(12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                color: _items.contains(widget.model)
+                    ? Colors.green
+                    : Colors.orange,
+                elevation: 10,
+                child: Text(
+                  _items.contains(widget.model)
+                      ? 'Added to cart'
+                      : 'Add to Cart',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
+                ),
               ),
             )
           ],

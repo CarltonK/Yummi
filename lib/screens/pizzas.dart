@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yummi/models/pizzaModel.dart';
+import 'package:yummi/screens/orderDetail.dart';
 import 'package:yummi/screens/pizzadetail.dart';
 import 'package:yummi/widgets/starRate.dart';
 
@@ -11,10 +13,11 @@ class Pizzas extends StatefulWidget {
 class _PizzasState extends State<Pizzas> {
   PageController _pageController;
   int _pageSelected = 1;
+  List<PizzaModel> _items = [];
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: 0, viewportFraction: 0.9);
+    _pageController = PageController(initialPage: 0, viewportFraction: 0.8);
     super.initState();
   }
 
@@ -100,31 +103,51 @@ class _PizzasState extends State<Pizzas> {
                             height: 10,
                           ),
                           Text(
-                            '${pizzas[index].price.toInt().toString()} KES',
+                            '${pizzas[index].price.toStringAsFixed(2)} \$',
                             style: TextStyle(fontSize: 30),
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.orange,
-                                borderRadius: BorderRadius.circular(20)),
-                            padding: EdgeInsets.all(8),
-                            child: Center(
-                                child: Row(
+                          MaterialButton(
+                            color: _items.contains(pizzas[index])
+                                ? Colors.green
+                                : Colors.orange,
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            onPressed: () {
+                              setState(() {
+                                if (_items.contains(pizzas[index])) {
+                                  _items.remove(pizzas[index]);
+                                } else {
+                                  _items.add(pizzas[index]);
+                                }
+                              });
+                            },
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Icon(
-                                  Icons.add_shopping_cart,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  'Add to cart',
-                                  style: TextStyle(color: Colors.white),
-                                )
+                                _items.contains(pizzas[index])
+                                    ? Icon(
+                                        Icons.done,
+                                        color: Colors.white,
+                                      )
+                                    : Icon(
+                                        Icons.add_shopping_cart,
+                                        color: Colors.white,
+                                      ),
+                                _items.contains(pizzas[index])
+                                    ? Text(
+                                        'Added to cart',
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    : Text(
+                                        'Add to cart',
+                                        style: TextStyle(color: Colors.white),
+                                      )
                               ],
-                            )),
+                            ),
                           )
                         ],
                       ),
@@ -171,7 +194,7 @@ class _PizzasState extends State<Pizzas> {
                   image: NetworkImage(map.imageUrl),
                   height: 100,
                   width: double.maxFinite,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 )),
             SizedBox(
               height: 5,
@@ -190,7 +213,7 @@ class _PizzasState extends State<Pizzas> {
               height: 5,
             ),
             Text(
-              '${map.price.toInt().toString()} KES',
+              '${map.price.toStringAsFixed(2)} \$',
               style: TextStyle(fontSize: 20),
             ),
           ],
@@ -211,13 +234,57 @@ class _PizzasState extends State<Pizzas> {
           ),
           centerTitle: true,
           actions: [
-            IconButton(
-              icon: Icon(
-                Icons.shopping_cart,
-                color: Colors.orange,
-                size: 30,
+            Container(
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      CupertinoIcons.shopping_cart,
+                      color: Colors.orange,
+                      size: 36,
+                    ),
+                    onPressed: () {
+                      _items.isNotEmpty
+                          ? Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => OrderDetail(_items),
+                            ))
+                          : showCupertinoModalPopup(
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: Text('Your cart is empty'),
+                                  actions: [
+                                    FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text(
+                                          'OK',
+                                          style: TextStyle(
+                                              color: Colors.blue[700]),
+                                        ))
+                                  ],
+                                );
+                              },
+                            );
+                    },
+                  ),
+                  _items.length > 0
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 2),
+                          child: CircleAvatar(
+                            radius: 8,
+                            backgroundColor: Colors.orange,
+                            foregroundColor: Colors.white,
+                            child: Text(
+                              _items.length.toString(),
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        )
+                      : Container()
+                ],
               ),
-              onPressed: () => print('Shopping Cart Pressed'),
             )
           ],
         ),

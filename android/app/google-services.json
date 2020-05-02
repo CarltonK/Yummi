@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "503759603043",
+    "firebase_url": "https://yummi-f7add.firebaseio.com",
+    "project_id": "yummi-f7add",
+    "storage_bucket": "yummi-f7add.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503759603043:android:adb80dfaa2a32ad45bff56",
+        "android_client_info": {
+          "package_name": "com.pizza.yummi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "503759603043-flg65d00ah1tms8gesvadacj0eel1mtg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-BZN36wMVuQK2puCy-UVP0tkSvLDH-Y0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "503759603043-flg65d00ah1tms8gesvadacj0eel1mtg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

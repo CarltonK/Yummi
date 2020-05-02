@@ -1,16 +1,15 @@
 # yummi
 
-A new Flutter project.
+This is a Pizza ordering web app. It is also available in Android, iOS and Desktop.
+The system has been developed in Google's Cross Platform Framework, Flutter.
 
-## Getting Started
+The backend is developed on Google's Firebase serverless architecture.
+The database is Cloud Firestore
+The web app is hosted on Cloud Hosting running on Google Cloud Platform
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Available Features
+    - Order one or more Pizza(s) and Checkout
+    - View Pizza Details such as rating
+    - Currency conversion (dollars to euros and vice versa)
+    - Delivery available

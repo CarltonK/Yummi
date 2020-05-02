@@ -126,7 +126,7 @@ class _PizzaDetailState extends State<PizzaDetail> {
                             value: widget.model.rating.toInt(),
                           ),
                           Text(
-                            '${widget.model.price.toInt().toString()} KES',
+                            '\$ ${widget.model.price.toInt().toString()}',
                             style: TextStyle(fontSize: 30),
                           )
                         ],
@@ -200,8 +200,8 @@ class _PizzaDetailState extends State<PizzaDetail> {
                 ),
                 Text(
                   _quantity == 1
-                      ? '${widget.model.price.toInt().toString()} KES'
-                      : '$_totalPrice KES',
+                      ? ' \$ ${widget.model.price.toInt().toString()}'
+                      : '\$ $_totalPrice',
                   style: TextStyle(color: Colors.white, fontSize: 30),
                 )
               ],
